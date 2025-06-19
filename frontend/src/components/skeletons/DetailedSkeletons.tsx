@@ -30,10 +30,10 @@ export function WeatherCardSkeleton() {
         </div>
 
         {/* Hourly Forecast Skeleton */}
-        <div className="mt-6">
+        {/* <div className="mt-6">
           <div className="h-6 bg-gray-300 rounded w-40 mb-4"></div>
           <div className="flex gap-3 overflow-x-auto pb-2">
-            {[...Array(8)].map((_, index) => (
+            {[...Array(24)].map((_, index) => (
               <div key={index} className="flex-shrink-0 w-24 p-3 bg-gray-50 rounded-lg">
                 <div className="animate-pulse space-y-2">
                   <div className="h-3 bg-gray-300 rounded w-12 mx-auto"></div>
@@ -49,26 +49,32 @@ export function WeatherCardSkeleton() {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
 }
 
-export function SmallWeatherCardSkeleton() {
+export function HourlyForcastSkeleton() {
   return (
-    <div className="flex-shrink-0 w-24 p-3 bg-gray-50 rounded-lg border border-gray-200">
-      <div className="animate-pulse space-y-2">
-        <div className="h-3 bg-gray-300 rounded w-12 mx-auto"></div>
-        <div className="h-4 bg-gray-300 rounded w-16 mx-auto"></div>
-        <div className="w-8 h-8 bg-gray-300 rounded mx-auto"></div>
-        <div className="h-5 bg-gray-300 rounded w-8 mx-auto"></div>
-        <div className="h-3 bg-gray-300 rounded w-6 mx-auto"></div>
-        <div className="space-y-1">
-          <div className="h-2 bg-gray-300 rounded w-8 mx-auto"></div>
-          <div className="h-2 bg-gray-300 rounded w-6 mx-auto"></div>
-          <div className="h-2 bg-gray-300 rounded w-6 mx-auto"></div>
-        </div>
+    <div className="mt-6">
+      <div className="h-6 bg-gray-300 rounded w-40 mb-4"></div>
+      <div className="flex gap-3 overflow-x-auto pb-2">
+        {[...Array(24)].map((_, index) => (
+          <div key={index} className="flex-shrink-0 w-24 p-3 bg-gray-50 rounded-lg">
+            <div className="animate-pulse space-y-2">
+              <div className="h-3 bg-gray-300 rounded w-12 mx-auto"></div>
+              <div className="h-4 bg-gray-300 rounded w-16 mx-auto"></div>
+              <div className="w-8 h-8 bg-gray-300 rounded mx-auto"></div>
+              <div className="h-5 bg-gray-300 rounded w-8 mx-auto"></div>
+              <div className="h-3 bg-gray-300 rounded w-6 mx-auto"></div>
+              <div className="space-y-1">
+                <div className="h-2 bg-gray-300 rounded w-8 mx-auto"></div>
+                <div className="h-2 bg-gray-300 rounded w-6 mx-auto"></div>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
