@@ -77,6 +77,7 @@ export interface WeatherResponse {
 export interface WeatherState {
   currentWeather: CurrentWeather | null;
   hourlyWeather: HourlyForecast[] | null;
+  alerts: Alert[]; 
   selectedCity: City;
   isLoading: boolean;
   isRefreshing: boolean;
