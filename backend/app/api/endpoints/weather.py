@@ -88,39 +88,3 @@ async def get_weather_forecast(
             status_code=500,
             detail="An unexpected error occurred while fetching weather data"
         )
-
-
-# Legacy endpoint for backward compatibility
-@router.get(
-    "/forecast_weather",
-    response_model=WeatherResponse,
-    deprecated=True,
-    tags=["Weather", "Legacy"]
-)
-async def get_weather_forecast_legacy(
-    location: Optional[str] = None,
-    lat: Optional[float] = None,
-    lon: Optional[float] = None,
-    weather_service: WeatherService = Depends(get_weather_service)
-) -> WeatherResponse:
-    """
-    Legacy endpoint for weather forecast (deprecated)
-    
-    **Deprecated:** Use `/forecast` endpoint instead.
-    """
-    # Validate parameters manually for legacy endpoint
-    if not location and (lat is None or lon is None):
-        raise HTTPException(
-            status_code=400,
-            detail="Either 'location' or both 'lat' and 'lon' parameters must be provided"
-        )
-    
-    try:
-        return await weather_service.get_weather_forecast(
-            location=location,
-            lat=lat,
-            lon=lon
-        )
-    except Exception as e:
-        logger.error(f"Error in legacy endpoint: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
