@@ -1,0 +1,19 @@
+{
+  "builds": [
+    {
+      "src": "main.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "main.py"
+    }
+  ],
+  "env": {
+    "WEATHER_API_KEY": "@weather_api_key",
+    "WEATHER_API_URL": "@weather_api_url",
+    "FORECAST_API_URL": "@forecast_api_url"
+  }
+}

@@ -1,9 +1,11 @@
 """
 Health check endpoints
 """
+
 from datetime import datetime
-from fastapi import APIRouter, Depends
+
 import httpx
+from fastapi import APIRouter, Depends
 
 from app.core.config import get_settings
 from app.core.logging import get_logger
@@ -18,7 +20,7 @@ async def health_check():
     return {
         "status": "healthy",
         "timestamp": datetime.now().isoformat(),
-        "service": "Weather API"
+        "service": "Weather API",
     }
 
 
@@ -31,9 +33,9 @@ async def detailed_health_check(settings: get_settings = Depends()):
         "service": "Weather API",
         "version": "1.0.0",
         "environment": settings.environment,
-        "external_services": {}
+        "external_services": {},
     }
-    
+
     # Check weather API connectivity
     try:
         async with httpx.AsyncClient(timeout=5.0) as client:
@@ -42,19 +44,23 @@ async def detailed_health_check(settings: get_settings = Depends()):
                 params={
                     "key": settings.weather_api_key,
                     "q": "London",  # Test with a known location
-                    "aqi": "no"
-                }
+                    "aqi": "no",
+                },
             )
             health_data["external_services"]["weather_api"] = {
                 "status": "healthy" if response.status_code == 200 else "unhealthy",
-                "response_time_ms": response.elapsed.total_seconds() * 1000 if response.elapsed else None
+                "response_time_ms": (
+                    response.elapsed.total_seconds() * 1000
+                    if response.elapsed
+                    else None
+                ),
             }
     except Exception as e:
         logger.warning(f"Weather API health check failed: {e}")
         health_data["external_services"]["weather_api"] = {
             "status": "unhealthy",
-            "error": str(e)
+            "error": str(e),
         }
         health_data["status"] = "degraded"
-    
+
     return health_data

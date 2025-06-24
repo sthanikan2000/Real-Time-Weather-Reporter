@@ -1,18 +1,22 @@
 """
 Weather data models
 """
+
 from typing import List, Optional
+
 from pydantic import BaseModel, Field
 
 
 class WeatherCondition(BaseModel):
     """Weather condition model"""
+
     text: str = Field(..., description="Weather condition text")
     icon: str = Field(..., description="Weather icon URL")
 
 
 class CurrentWeather(BaseModel):
     """Current weather model"""
+
     last_updated: str = Field(..., description="Last updated timestamp")
     temp_c: float = Field(..., description="Temperature in Celsius")
     temp_f: float = Field(..., description="Temperature in Fahrenheit")
@@ -33,6 +37,7 @@ class CurrentWeather(BaseModel):
 
 class HourlyForecast(BaseModel):
     """Hourly forecast model"""
+
     time: str = Field(..., description="Forecast time")
     temp_c: float = Field(..., description="Temperature in Celsius")
     temp_f: float = Field(..., description="Temperature in Fahrenheit")
@@ -49,6 +54,7 @@ class HourlyForecast(BaseModel):
 
 class Location(BaseModel):
     """Location model"""
+
     name: str = Field(..., description="Location name")
     region: str = Field(..., description="Region/state")
     country: str = Field(..., description="Country")
@@ -56,6 +62,7 @@ class Location(BaseModel):
 
 class Alert(BaseModel):
     """Weather alert model"""
+
     headline: str = Field(..., description="Alert headline")
     msgtype: Optional[str] = Field(None, description="Message type")
     severity: Optional[str] = Field(None, description="Severity level")
@@ -73,6 +80,7 @@ class Alert(BaseModel):
 
 class WeatherMessage(BaseModel):
     """Weather message model"""
+
     location: Location = Field(..., description="Location information")
     alerts: List[Alert] = Field(default=[], description="Weather alerts")
     current: CurrentWeather = Field(..., description="Current weather")
@@ -81,12 +89,14 @@ class WeatherMessage(BaseModel):
 
 class WeatherResponse(BaseModel):
     """Weather API response model"""
+
     error: bool = Field(default=False, description="Error status")
     message: WeatherMessage = Field(..., description="Weather data")
 
 
 class ErrorResponse(BaseModel):
     """Error response model"""
+
     error: bool = Field(default=True, description="Error status")
     message: str = Field(..., description="Error message")
     detail: Optional[str] = Field(None, description="Error details")

@@ -1,13 +1,14 @@
 """
 Main FastAPI application entry point
 """
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
+from app.api.router import api_router
 from app.core.config import get_settings
 from app.core.logging import setup_logging
-from app.api.router import api_router
 
 # Initialize settings and logging
 settings = get_settings()
@@ -34,6 +35,7 @@ app.add_middleware(
 # Include API routes
 app.include_router(api_router, prefix="/api")
 
+
 @app.get("/", tags=["Root"])
 async def root():
     """Root endpoint"""
@@ -41,8 +43,9 @@ async def root():
         "message": "Weather API is running",
         "status": "healthy",
         "version": "1.0.0",
-        "docs": "/docs"
+        "docs": "/docs",
     }
+
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request, exc):
@@ -52,16 +55,22 @@ async def global_exception_handler(request, exc):
         content={
             "error": True,
             "message": "Internal server error",
-            "detail": str(exc) if settings.environment == "development" else "Something went wrong"
-        }
+            "detail": (
+                str(exc)
+                if settings.environment == "development"
+                else "Something went wrong"
+            ),
+        },
     )
+
 
 # For Vercel
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(
         "main:app",
         host="0.0.0.0",
         port=8000,
-        reload=settings.environment == "development"
+        reload=settings.environment == "development",
     )
