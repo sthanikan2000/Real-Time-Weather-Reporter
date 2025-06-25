@@ -1,11 +1,7 @@
 // src/services/weatherService.ts
 import type { WeatherResponse } from '../types/weather';
 
-<<<<<<< HEAD
-const BASE_URL = import.meta.env.VITE_B_PATH;
-=======
 const BASE_URL = import.meta.env.VITE_BASE_PATH_PROD;
->>>>>>> e2127c9e5daca33f1db10e43f25dff25592faa21
 // const BASE_URL_LOCAL = import.meta.env.VITE_BASE_PATH_LOCAL;
 const REQUEST_TIMEOUT = 10000; // 10 seconds
 
