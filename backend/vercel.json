@@ -10,10 +10,5 @@
       "src": "/(.*)",
       "dest": "main.py"
     }
-  ],
-  "env": {
-    "WEATHER_API_KEY": "@WEATHER_API_KEY",
-    "WEATHER_API_URL": "@WEATHER_API_URL",
-    "FORECAST_API_URL": "@FORECAST_API_URL"
-  }
+  ]
 }
