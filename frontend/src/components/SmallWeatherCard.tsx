@@ -35,7 +35,7 @@ export default function SmallWeatherCard({ forecast}: SmallWeatherCardProps) {
 
   return (
     <div className="
-      flex-shrink-0 w-48 p-3 rounded-lg text-center transition-all duration-200 bg-white border border-gray-200 hover:bg-gray-300 hover:scale-105 hover:shadow-lg cursor-pointer">
+      flex-shrink-0 w-48 p-3 rounded-lg text-center transition-all duration-200 bg-white border border-gray-200 hover:bg-gray-300 hover:scale-105 hover:shadow-lg cursor-pointer h-full">
       <div className="space-y-2">
         {/* Date */}
         <div className="text-xs text-gray-500 font-medium">

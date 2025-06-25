@@ -2,11 +2,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import type { WeatherState } from '../types/weather';
 import type { City } from '../types/city';
-import { DEFAULT_WEATHER_RESPONSE } from '../constants/weatherResponse';
 import { DEFAULT_CITIES } from '../constants/city';
 import { fetchWeatherData } from '../services/weatherService';
 
-const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
+const REFRESH_INTERVAL = 15 * 60 * 1000; // 15 minutes - weatherapi.com updates every 15 minutes
 const RETRY_INTERVAL = 1 * 60 * 1000; // 1 minute
 
 export const useWeatherData = () => {
@@ -24,7 +23,7 @@ export const useWeatherData = () => {
 
   const refreshIntervalRef = useRef<number | null>(null);
   const retryTimeoutRef = useRef<number | null>(null);
-  const isInitialLoad = useRef(true);
+  const isInitializedRef = useRef(false);
 
   // Clear all timers on unmount
   useEffect(() => {
@@ -38,12 +37,32 @@ export const useWeatherData = () => {
     };
   }, []);
 
+  // Clear existing timers helper
+  const clearTimers = useCallback(() => {
+    if (refreshIntervalRef.current) {
+      clearInterval(refreshIntervalRef.current);
+      refreshIntervalRef.current = null;
+    }
+    if (retryTimeoutRef.current) {
+      clearTimeout(retryTimeoutRef.current);
+      retryTimeoutRef.current = null;
+    }
+  }, []);
+
+  // Set up auto-refresh interval
+  const setupRefreshInterval = useCallback((city: City) => {
+    clearTimers();
+    refreshIntervalRef.current = setInterval(() => {
+      fetchWeather(city, true);
+    }, REFRESH_INTERVAL);
+  }, [clearTimers]);
+
   // Fetch weather data function
   const fetchWeather = useCallback(async (city: City, isRefresh = false) => {
     try {
       setState(prev => ({
         ...prev,
-        isLoading: !isRefresh && isInitialLoad.current,
+        isLoading: !isRefresh && !isInitializedRef.current,
         isRefreshing: isRefresh,
         error: null,
       }));
@@ -62,13 +81,9 @@ export const useWeatherData = () => {
         retryCount: 0,
       }));
 
-      isInitialLoad.current = false;
-
-      // Set up auto-refresh interval if not already set
+      // Set up auto-refresh only after successful fetch and only once
       if (!refreshIntervalRef.current) {
-        refreshIntervalRef.current = setInterval(() => {
-          fetchWeather(city, true);
-        }, REFRESH_INTERVAL);
+        setupRefreshInterval(city);
       }
 
     } catch (error) {
@@ -77,64 +92,49 @@ export const useWeatherData = () => {
       setState(prev => {
         const newRetryCount = prev.retryCount + 1;
         
-        // If this is the first load and it fails, use mock data
-        if (isInitialLoad.current) {
-          return {
-            ...prev,
-            currentWeather: DEFAULT_WEATHER_RESPONSE.message.current,
-            hourlyWeather: DEFAULT_WEATHER_RESPONSE.message.forecast,
-            alerts: DEFAULT_WEATHER_RESPONSE.message.alerts,
-            isLoading: false,
-            isRefreshing: false,
-            error: 'Connection issue - showing sample data',
-            retryCount: newRetryCount,
-          };
-        }
-
-        // For subsequent failures, keep existing data
         return {
           ...prev,
           isLoading: false,
           isRefreshing: false,
-          error: 'Connection issue - showing last known data',
+          error: `Failed to load weather data (attempt ${newRetryCount})`,
           retryCount: newRetryCount,
         };
       });
 
-      isInitialLoad.current = false;
-
-      // Set up retry timeout
+      // Set up retry timeout with exponential backoff (max 5 minutes)
+      const retryDelay = Math.min(RETRY_INTERVAL * Math.pow(2, state.retryCount), 5 * 60 * 1000);
+      
       if (retryTimeoutRef.current) {
         clearTimeout(retryTimeoutRef.current);
       }
       
       retryTimeoutRef.current = setTimeout(() => {
         fetchWeather(city, true);
-      }, RETRY_INTERVAL);
+      }, retryDelay);
     }
-  }, []);
+  }, [setupRefreshInterval, state.retryCount]);
 
   // Change city handler
   const changeCity = useCallback((city: City) => {
+    // Don't change if it's the same city
+    if (state.selectedCity.id === city.id) {
+      return;
+    }
+
     // Clear existing timers
-    if (refreshIntervalRef.current) {
-      clearInterval(refreshIntervalRef.current);
-      refreshIntervalRef.current = null;
-    }
-    if (retryTimeoutRef.current) {
-      clearTimeout(retryTimeoutRef.current);
-      retryTimeoutRef.current = null;
-    }
+    clearTimers();
 
     setState(prev => ({
       ...prev,
       selectedCity: city,
+      isLoading: true,
+      error: null,
+      retryCount: 0,
     }));
 
-    // Reset initial load flag and fetch data for new city
-    isInitialLoad.current = true;
+    // Fetch data for new city
     fetchWeather(city);
-  }, [fetchWeather]);
+  }, [state.selectedCity.id, clearTimers, fetchWeather]);
 
   // Manual refresh handler
   const refreshWeather = useCallback(() => {
@@ -143,17 +143,13 @@ export const useWeatherData = () => {
     }
   }, [fetchWeather, state.selectedCity, state.isRefreshing, state.isLoading]);
 
-  // Initial load effect
+  // Initial load effect - only runs once
   useEffect(() => {
-    fetchWeather(state.selectedCity);
-  }, [fetchWeather]);
-
-  // Cleanup effect when city changes
-  useEffect(() => {
-    if (state.selectedCity) {
+    if (!isInitializedRef.current) {
+      isInitializedRef.current = true;
       fetchWeather(state.selectedCity);
     }
-  }, [state.selectedCity.id]); // Only trigger when city ID changes
+  }, []); // Empty dependency array ensures this only runs once
 
   return {
     ...state,

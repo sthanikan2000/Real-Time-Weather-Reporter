@@ -1,7 +1,8 @@
 // src/services/weatherService.ts
 import type { WeatherResponse } from '../types/weather';
 
-const BASE_URL = import.meta.env.VITE_BASE_PATH_PROD ? import.meta.env.VITE_BASE_PATH_PROD : import.meta.env.VITE_BASE_PATH_LOCAL;
+const BASE_URL = import.meta.env.VITE_BASE_PATH_PROD;
+// const BASE_URL_LOCAL = import.meta.env.VITE_BASE_PATH_LOCAL;
 const REQUEST_TIMEOUT = 10000; // 10 seconds
 
 class WeatherServiceError extends Error {
@@ -106,16 +107,18 @@ export const checkAPIHealth = async (): Promise<boolean> => {
   }
 };
 
-// Get available cities from the API (if supported)
-export const fetchAvailableCities = async (): Promise<string[]> => {
-  try {
-    const response = await fetchWithTimeout(`${BASE_URL}/api/cities`);
-    if (response.ok) {
-      const cities = await response.json();
-      return Array.isArray(cities) ? cities : [];
-    }
-    return [];
-  } catch {
-    return [];
-  }
-};
+// Not implemented yet in backend
+
+// Get available cities from the API (if supported) 
+// export const fetchAvailableCities = async (): Promise<string[]> => {
+//   try {
+//     const response = await fetchWithTimeout(`${BASE_URL}/api/cities`);
+//     if (response.ok) {
+//       const cities = await response.json();
+//       return Array.isArray(cities) ? cities : [];
+//     }
+//     return [];
+//   } catch {
+//     return [];
+//   }
+// };
