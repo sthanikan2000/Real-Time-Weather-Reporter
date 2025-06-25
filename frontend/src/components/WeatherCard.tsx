@@ -232,7 +232,8 @@
 // };
 // src/components/CurrentWeatherCard.tsx
 import { RefreshCw, MapPin, Clock } from 'lucide-react';
-import type { CurrentWeather, HourlyForecast, Location } from '../types/weather';
+import type { CurrentWeather, HourlyForecast } from '../types/weather';
+import type { Location } from '../types/city';
 import LoadingSpinner from './LoadingSpinner';
 import Temperature from './Temperature';
 import Humidity from './Humidity';
