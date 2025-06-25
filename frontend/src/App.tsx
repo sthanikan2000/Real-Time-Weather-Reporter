@@ -3,6 +3,8 @@ import { Cloud, Globe } from 'lucide-react';
 import { useWeatherData } from './hooks/useWeatherData';
 import CitySelector from './components/CitySelector';
 import WeatherCard from './components/WeatherCard';
+// import { getWeatherTheme } from './utils/weatherBackgrounds';
+// import { useState, useEffect } from 'react';
 
 function App(){
   const {
@@ -19,8 +21,30 @@ function App(){
     availableCities,
   } = useWeatherData();
   // console.log("App Component Rendered:",currentWeather);
+
+  // const [theme, setTheme] = useState({
+  //   background: 'bg-gradient-to-br from-blue-50 to-indigo-100',
+  //   text: 'text-gray-800',
+  // });
+
+  // useEffect(() => {
+  //   if (currentWeather) {
+  //     const weatherCondition = {
+  //       text: currentWeather.condition.text,
+  //       icon: currentWeather.condition.icon,
+  //     };
+  //     const newTheme = getWeatherTheme(weatherCondition);
+
+  //     setTheme({
+  //       background: newTheme.gradient,
+  //       text: newTheme.textColor,
+  //     });
+  //   }
+    
+  // }, [currentWeather]);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className={`min-h-screen bg-gradient-to-br from-slate-500 via-yellow-50 to-blue-300`}>
       <div className="container mx-auto px-8 py-8 max-w-8xl">
         {/* Header */}
         <header className="text-center mb-8">
