@@ -62,7 +62,8 @@ export const useWeatherData = () => {
     try {
       setState(prev => ({
         ...prev,
-        isLoading: !isRefresh && !isInitializedRef.current,
+        // isLoading: !isRefresh && !isInitializedRef.current,
+        isLoading: true,
         isRefreshing: isRefresh,
         error: null,
       }));
