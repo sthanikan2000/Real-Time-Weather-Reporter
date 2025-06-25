@@ -1,7 +1,8 @@
 // src/services/weatherService.ts
 import type { WeatherResponse } from '../types/weather';
 
-const BASE_URL = import.meta.env.VITE_BASE_PATH_PROD ? import.meta.env.VITE_BASE_PATH_PROD : import.meta.env.VITE_BASE_PATH_LOCAL;
+const BASE_URL = import.meta.env.VITE_B_PATH;
+// const BASE_URL_LOCAL = import.meta.env.VITE_BASE_PATH_LOCAL;
 const REQUEST_TIMEOUT = 10000; // 10 seconds
 
 class WeatherServiceError extends Error {
