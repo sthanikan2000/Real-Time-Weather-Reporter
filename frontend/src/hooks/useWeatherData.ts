@@ -1,7 +1,9 @@
 // src/hooks/useWeatherData.ts
 import { useState, useEffect, useRef, useCallback } from 'react';
-import type { WeatherState, City} from '../types/weather';
-import { DEFAULT_WEATHER_RESPONSE, DEFAULT_CITIES } from '../types/weather';
+import type { WeatherState } from '../types/weather';
+import type { City } from '../types/city';
+import { DEFAULT_WEATHER_RESPONSE } from '../constants/weatherResponse';
+import { DEFAULT_CITIES } from '../constants/city';
 import { fetchWeatherData } from '../services/weatherService';
 
 const REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes

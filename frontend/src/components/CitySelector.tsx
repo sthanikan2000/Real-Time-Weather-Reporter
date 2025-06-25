@@ -1,6 +1,6 @@
 // src/components/CitySelector.tsx
 import { useState, useRef, useEffect } from 'react';
-import type { City } from '../types/weather';
+import type { City } from '../types/city';
 
 interface CitySelectorProps {
   cities: City[];
