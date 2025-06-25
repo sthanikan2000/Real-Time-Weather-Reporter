@@ -24,7 +24,7 @@ export function WeatherCardSkeleton() {
 
         {/* Weather Metrics Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {[...Array(4)].map((_, index) => (
+          {[...Array(5)].map((_, index) => (
             <SkeletonCard key={index} />
           ))}
         </div>

@@ -1,15 +1,249 @@
+// // src/components/WeatherCard.tsx
+// import { RefreshCw, MapPin, Clock } from 'lucide-react';
+// import type { CurrentWeather, HourlyForecast, Location } from '../types/weather';
+// import LoadingSpinner from './LoadingSpinner';
+// import Temperature from './Temperature';
+// import Humidity from './Humidity';
+// import WindSpeed from './WindSpeed';
+// import UVIndex from './UVIndex';
+// import Precipitation from './Precipitation';
+// import WeatherCondition from './WeatherCondition';
+// import { WeatherCardSkeleton } from './skeletons/DetailedSkeletons';
+// import SmallWeatherCard from './SmallWeatherCard';
+// import { getCardTheme, getAccentTheme, getIconTheme } from '../utils/weatherBackgrounds';
+
+// interface WeatherCardProps {
+//   location: Location;
+//   current: CurrentWeather | null;
+//   hourlyWeather: HourlyForecast[] | null;
+//   isLoading: boolean;
+//   isRefreshing: boolean;
+//   lastUpdated: Date | null;
+//   error: string | null;
+//   onRefresh: () => void;
+// }
+
+// export default function WeatherCard(
+//   {
+//     location,
+//     current,
+//     hourlyWeather,
+//     isLoading,
+//     isRefreshing,
+//     lastUpdated,
+//     error,
+//     onRefresh,
+//   }: WeatherCardProps
+// ){
+//   const formatLastUpdated = (date: Date | null) => {
+//     if (!date) return 'Never';
+    
+//     const now = new Date();
+//     const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
+    
+//     if (diffInMinutes < 1) return 'Just Now';
+//     if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
+    
+//     return date.toLocaleDateString();
+//   };
+
+//   // Get theme colors based on current weather condition
+//   const cardTheme = current 
+//     ? getCardTheme(current.condition, 'rounded-lg shadow-lg p-6 mb-6')
+//     : 'bg-white rounded-lg shadow-lg p-6 mb-6';
+  
+//   const accentColor = current ? getAccentTheme(current.condition) : 'text-blue-600';
+//   const iconColor = current ? getIconTheme(current.condition) : 'text-blue-500';
+
+//   if (isLoading) {
+//     return (
+//       <div className={cardTheme}>
+//         <WeatherCardSkeleton />
+//       </div>
+//     );
+//   }
+
+//   if (!current) {
+//     return (
+//       <div className={cardTheme}>
+//         <div className="text-center py-8">
+//           <p className={`${accentColor} opacity-70`}>No weather data available</p>
+//         </div>
+//       </div>
+//     );
+//   }
+
+//   return (
+//     <div className={cardTheme}>
+//       {/* Header */}
+//       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+//         <div className="flex items-center mb-4 sm:mb-0">
+//           <MapPin className={`h-5 w-5 ${iconColor} mr-2`} />
+//           <div>
+//             <h2 className={`text-xl font-semibold ${accentColor}`}>
+//               Weather in {location.name}
+//             </h2>
+//             <p className={`text-sm ${accentColor} opacity-70`}>
+//               {location.region}, {location.country}
+//             </p>
+//           </div>
+//         </div>
+        
+//         <div className="flex items-center space-x-4">
+//           <div className={`flex items-center text-sm ${accentColor} opacity-70`}>
+//             <Clock className="h-4 w-4 mr-1" />
+//             <span>Updated {formatLastUpdated(lastUpdated)}</span>
+//           </div>
+          
+//           <button
+//             onClick={onRefresh}
+//             disabled={isRefreshing}
+//             className={`
+//               flex items-center px-3 py-2 rounded-md text-md font-medium
+//               transition-all duration-300 hover:shadow-lg hover:scale-105 cursor-pointer
+//               ${isRefreshing 
+//                 ? 'bg-gray-100/50 text-gray-400 cursor-not-allowed' 
+//                 : `${current ? 'bg-white/20 backdrop-blur-sm' : 'bg-blue-50'} ${accentColor} hover:bg-white/30 active:bg-white/40 border border-white/30`
+//               }
+//             `}
+//           >
+//             {isRefreshing ? (
+//               <LoadingSpinner size="md" />
+//             ) : (
+//               <RefreshCw className={`h-6 w-6 mr-2 ${iconColor} hover:rotate-180 transition-transform duration-500`} />
+//             )}
+//             <span className='text-lg'>{isRefreshing ? 'Updating...' : 'Refresh'}</span>
+//           </button>
+//         </div>
+//       </div>
+
+//       {/* Error Banner */}
+//       {error && (
+//         <div className={`${current ? 'bg-white/20 backdrop-blur-sm border-white/30' : 'bg-yellow-50 border-yellow-200'} border rounded-md p-4 mb-6`}>
+//           <div className="flex">
+//             <div className="flex-shrink-0">
+//               <svg
+//                 className={`h-5 w-5 ${iconColor || 'text-yellow-400'}`}
+//                 viewBox="0 0 20 20"
+//                 fill="currentColor"
+//               >
+//                 <path
+//                   fillRule="evenodd"
+//                   d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
+//                   clipRule="evenodd"
+//                 />
+//               </svg>
+//             </div>
+//             <div className="ml-3">
+//               <p className={`text-sm font-medium ${accentColor}`}>{error}</p>
+//             </div>
+//           </div>
+//         </div>
+//       )}
+
+//       {/* Weather Metrics Grid - New Layout */}
+//       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-6">
+//         {/* Top Row: WeatherCondition (3 columns) + UVIndex (1 column) */}
+//         <div className="lg:col-span-3">
+//           <WeatherCondition condition={current.condition} />
+//         </div>
+//         <div className="lg:col-span-1">
+//           <UVIndex 
+//             uv={current.uv} 
+//             // condition={current.condition} 
+//           />
+//         </div>
+//       </div>
+
+//       {/* Bottom Row: 4 equal columns */}
+//       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+//         <Temperature  
+//           temp_c={current.temp_c} 
+//           temp_f={current.temp_f} 
+//           feelslike_c={current.feelslike_c} 
+//           feelslike_f={current.feelslike_f}
+//           // condition={current.condition}
+//         /> 
+//         <WindSpeed  
+//           wind_kph={current.wind_kph} 
+//           wind_mph={current.wind_mph} 
+//           wind_dir={current.wind_dir} 
+//           wind_degree={current.wind_degree} 
+//           gust_kph={current.gust_kph} 
+//           gust_mph={current.gust_mph}
+//           // condition={current.condition}
+//         /> 
+//         <Precipitation 
+//           precip_mm={current.precip_mm} 
+//           precip_in={current.precip_in}
+//           // condition={current.condition}
+//         />
+//         <Humidity 
+//           humidity={current.humidity} 
+//           // condition={current.condition}
+//         />
+//       </div>
+
+//       {/* Hourly Forecast Section */}
+//       {(!hourlyWeather || hourlyWeather.length === 0) && (
+//         <div className={`${current ? 'bg-white/10 backdrop-blur-sm' : 'bg-white'} rounded-lg shadow-lg p-6 mt-6 mb-6`}>
+//           <div className="text-center py-8">
+//             <p className={`${accentColor} opacity-70`}>No hourly forecast data available</p>
+//           </div>
+//         </div>
+//       )}
+      
+//       {hourlyWeather && hourlyWeather.length > 0 && (
+//         <div className={`${current ? 'bg-white/10 backdrop-blur-sm border border-white/20' : 'bg-gray-100'} rounded-lg shadow-lg p-6 mt-6 mb-6`}>
+//           <h3 className={`text-lg font-semibold ${accentColor} mb-4`}>
+//             Hourly Forecast for the Next 24 Hours
+//           </h3>
+//           <div className="overflow-x-auto">
+//             <div className="flex space-x-4 py-4" style={{ minWidth: 'max-content' }}>
+//               {hourlyWeather.slice(0, 24).map((forecast, index) => (
+//                 <div key={`${forecast.time}-${index}`} className="flex-shrink-0">
+//                   <SmallWeatherCard
+//                     forecast={forecast}
+//                     // parentCondition={current.condition}
+//                   />
+//                 </div>
+//               ))}
+//             </div>
+//           </div>
+//         </div>
+//       )}
+
+//       {/* Last Updated Info */}
+//       <div className="mt-6 text-center">
+//         <span className={`text-sm ${accentColor} opacity-70`}>
+//           Last updated: {current.last_updated} at{' '}
+//         </span>
+//         <a
+//           href="https://www.weatherapi.com/"
+//           target="_blank"
+//           rel="noopener noreferrer"
+//           className={`text-sm ${accentColor} underline hover:opacity-100 transition-opacity duration-300`}
+//         >
+//           WeatherAPI.com
+//         </a>
+//       </div>
+//     </div>
+//   );
+// };
 // src/components/CurrentWeatherCard.tsx
 import { RefreshCw, MapPin, Clock } from 'lucide-react';
-import type { CurrentWeather,HourlyForecast, Location } from '../types/weather';
+import type { CurrentWeather, HourlyForecast, Location } from '../types/weather';
 import LoadingSpinner from './LoadingSpinner';
 import Temperature from './Temperature';
 import Humidity from './Humidity';
 import WindSpeed from './WindSpeed';
 import UVIndex from './UVIndex';
+import Precipitation from './Precipitation';
+import WeatherCondition from './WeatherCondition';
 import { WeatherCardSkeleton } from './skeletons/DetailedSkeletons';
 import SmallWeatherCard from './SmallWeatherCard';
 
-interface CurrentWeatherCardProps {
+interface WeatherCardProps {
   location: Location;
   current: CurrentWeather | null;
   hourlyWeather: HourlyForecast[] | null;
@@ -20,7 +254,7 @@ interface CurrentWeatherCardProps {
   onRefresh: () => void;
 }
 
-export default function CurrentWeatherCard(
+export default function WeatherCard(
   {
     location,
     current,
@@ -30,7 +264,7 @@ export default function CurrentWeatherCard(
     lastUpdated,
     error,
     onRefresh,
-  }: CurrentWeatherCardProps
+  }: WeatherCardProps
 ){
   const formatLastUpdated = (date: Date | null) => {
     if (!date) return 'Never';
@@ -38,11 +272,8 @@ export default function CurrentWeatherCard(
     const now = new Date();
     const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60));
     
-    if (diffInMinutes < 1) return 'Just now';
+    if (diffInMinutes < 1) return 'Just Now';
     if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
-    
-    const diffInHours = Math.floor(diffInMinutes / 60);
-    if (diffInHours < 24) return `${diffInHours}h ago`;
     
     return date.toLocaleDateString();
   };
@@ -52,7 +283,6 @@ export default function CurrentWeatherCard(
       <div className="bg-white rounded-lg shadow-lg p-6 mb-6">
         <WeatherCardSkeleton />
       </div>
-
     );
   }
 
@@ -92,8 +322,8 @@ export default function CurrentWeatherCard(
             onClick={onRefresh}
             disabled={isRefreshing}
             className={`
-              flex items-center px-3 py-2 rounded-md text-sm font-medium
-              transition-colors duration-200
+              flex items-center px-3 py-2 rounded-md text-md font-medium
+              transition-colors duration-200  hover:shadow-lg hover:scale-105 cursor-pointer
               ${isRefreshing 
                 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
                 : 'bg-blue-50 text-blue-600 hover:bg-blue-100 active:bg-blue-200'
@@ -101,11 +331,11 @@ export default function CurrentWeatherCard(
             `}
           >
             {isRefreshing ? (
-              <LoadingSpinner size="sm" />
+              <LoadingSpinner size="md" />
             ) : (
-              <RefreshCw className="h-4 w-4 mr-1" />
+              <RefreshCw className="h-8 w-8 mr-2" />
             )}
-            <span>{isRefreshing ? 'Updating...' : 'Refresh'}</span>
+            <span className='text-lg'>{isRefreshing ? 'Updating...' : 'Refresh'}</span>
           </button>
         </div>
       </div>
@@ -134,45 +364,38 @@ export default function CurrentWeatherCard(
         </div>
       )}
 
-      {/* Weather Condition */}
-      <div className="flex items-center justify-center mb-8">
-        <div className="text-center">
-          <img
-            src={current.condition.icon}
-            alt={current.condition.text}
-            className="h-16 w-16 mx-auto mb-2"
-            onError={(e) => {
-              // Fallback if icon fails to load
-              const target = e.target as HTMLImageElement;
-              target.style.display = 'none';
-            }}
-          />
-          <p className="text-lg font-medium text-gray-700 mb-1">
-            {current.condition.text}
-          </p>
-          <p className="text-sm text-gray-500">
-            Last updated: {current.last_updated}
-          </p>
+      {/* Weather Metrics Grid - New Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-6">
+        {/* Top Row: WeatherCondition (3 columns) + UVIndex (2 columns) */}
+        <div className="lg:col-span-3">
+          <WeatherCondition condition={current.condition} />
+        </div>
+        <div className="lg:col-span-1">
+          <UVIndex uv={current.uv} />
         </div>
       </div>
 
-      {/* Weather Metrics Grid */}
+      {/* Bottom Row: 4 equal columns */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Temperature 
-          temp_c={current.temp_c}
-          temp_f={current.temp_f}
-          feelslike_c={current.feelslike_c}
-          feelslike_f={current.feelslike_f}
+        <Temperature  
+          temp_c={current.temp_c} 
+          temp_f={current.temp_f} 
+          feelslike_c={current.feelslike_c} 
+          feelslike_f={current.feelslike_f} 
+        /> 
+        <WindSpeed  
+          wind_kph={current.wind_kph} 
+          wind_mph={current.wind_mph} 
+          wind_dir={current.wind_dir} 
+          wind_degree={current.wind_degree} 
+          gust_kph={current.gust_kph} 
+          gust_mph={current.gust_mph}
+        /> 
+        <Precipitation 
+          precip_mm={current.precip_mm} 
+          precip_in={current.precip_in} 
         />
         <Humidity humidity={current.humidity} />
-        <WindSpeed 
-          wind_kph={current.wind_kph}
-          wind_mph={current.wind_mph}
-          wind_dir={current.wind_dir}
-          wind_degree={current.wind_degree}
-          gust_kph={current.gust_kph}
-        />
-        <UVIndex uv={current.uv} />
       </div>
 
       {/* Sliding Forecasting Window */}
@@ -191,7 +414,7 @@ export default function CurrentWeatherCard(
             Hourly Forecast for the Next 24 Hours
           </h3>
           <div className="overflow-x-auto">
-            <div className="flex space-x-4 pb-2" style={{ minWidth: 'max-content' }}>
+            <div className="flex space-x-4 py-4" style={{ minWidth: 'max-content' }}>
               {hourlyWeather.slice(0, 24).map((forecast, index) => (
                 <div key={`${forecast.time}-${index}`} className="flex-shrink-0">
                   <SmallWeatherCard
@@ -203,6 +426,21 @@ export default function CurrentWeatherCard(
           </div>
         </div>
       )}
+
+      {/* Last Updated Info */}
+      <div className="mt-6 text-center">
+        <span className="text-sm text-gray-500">Last updated: {current.last_updated} at </span>
+        <span className="text-sm text-gray-500">
+          <a
+              href="https://www.weatherapi.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:text-blue-600"
+            >
+              WeatherAPI.com
+          </a>
+        </span>
+      </div>
       
     </div>
   );

@@ -13,7 +13,7 @@ export default function Temperature({
   feelslike_f
 }: TemperatureProps) {
   return (
-    <div className="group relative bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-lg border border-orange-100 hover:from-orange-100 hover:to-red-100 hover:border-orange-200 transition-all duration-300 cursor-pointer">
+    <div className="group relative bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-lg border border-orange-100 hover:from-orange-100 hover:to-red-100 hover:border-orange-200 transition-all duration-300 cursor-pointer hover:shadow-lg hover:scale-105 h-full">
       {/* Tooltip */}
       <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 -translate-y-full bg-gray-800 text-white text-xs rounded py-2 px-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap z-10">
         Current air temperature and how it feels to your body

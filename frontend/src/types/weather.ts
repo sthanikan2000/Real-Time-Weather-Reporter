@@ -39,7 +39,10 @@ export interface CurrentWeather {
   wind_dir: string;
   humidity: number;
   uv: number;
-  gust_kph?: number;
+  gust_kph: number;
+  gust_mph: number;
+  precip_mm: number;
+  precip_in: number;
 }
 
 export interface WeatherCondition {
@@ -58,6 +61,8 @@ export interface HourlyForecast {
   wind_dir: string;
   humidity: number;
   uv: number;
+  precip_mm:number;
+  precip_in: number;
 }
 
 export interface WeatherMessage {
@@ -127,7 +132,10 @@ export const DEFAULT_WEATHER_RESPONSE: WeatherResponse = {
       wind_dir: 'SSW',
       humidity: 70,
       uv: 5,
-      gust_kph: 20  
+      gust_kph: 20 ,
+      gust_mph: 12.5,
+      precip_mm: 0,
+      precip_in: 0
     },
     forecast: [
       {
@@ -143,7 +151,9 @@ export const DEFAULT_WEATHER_RESPONSE: WeatherResponse = {
               wind_degree: 200,
               wind_dir: "SSW",
               humidity: 80,
-              uv: 0
+              uv: 0,
+              precip_mm: 0,
+              precip_in: 0
           },
 
       {
@@ -159,7 +169,9 @@ export const DEFAULT_WEATHER_RESPONSE: WeatherResponse = {
               wind_degree: 210,
               wind_dir: "SSW",
               humidity: 82,
-              uv: 0
+              uv: 0,
+              precip_mm: 0,
+              precip_in: 0
           },
       {
               time: "2025-06-19 02:00",
@@ -174,7 +186,9 @@ export const DEFAULT_WEATHER_RESPONSE: WeatherResponse = {
               wind_degree: 220,
               wind_dir: "SW",
               humidity: 85,
-              uv: 0
+              uv: 0,
+              precip_mm: 0,
+              precip_in: 0
           },
       {
               time: "2025-06-19 03:00",
@@ -189,7 +203,9 @@ export const DEFAULT_WEATHER_RESPONSE: WeatherResponse = {
               wind_degree: 230,
               wind_dir: "SW",
               humidity: 87,
-              uv: 0
+              uv: 0,
+              precip_mm: 0,
+              precip_in: 0
           },
     ]
   }

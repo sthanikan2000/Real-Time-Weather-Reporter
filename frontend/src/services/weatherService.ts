@@ -1,7 +1,7 @@
 // src/services/weatherService.ts
 import type { WeatherResponse } from '../types/weather';
 
-const BASE_URL = import.meta.env.VITE_BASE_PATH || 'http://localhost:8000';
+const BASE_URL = import.meta.env.VITE_BASE_PATH_PROD ? import.meta.env.VITE_BASE_PATH_PROD : import.meta.env.VITE_BASE_PATH_LOCAL;
 const REQUEST_TIMEOUT = 10000; // 10 seconds
 
 class WeatherServiceError extends Error {
@@ -34,7 +34,7 @@ const fetchWithTimeout = async (url: string, options: RequestInit = {}, timeout 
 
 export const fetchWeatherData = async (location: string): Promise<WeatherResponse> => {
   try {
-    const url = `${BASE_URL}/api/forecast_weather?location=${encodeURIComponent(location)}`;
+    const url = `${BASE_URL}/api/forecast?location=${encodeURIComponent(location)}`;
     
     const response = await fetchWithTimeout(url, {
       method: 'GET',

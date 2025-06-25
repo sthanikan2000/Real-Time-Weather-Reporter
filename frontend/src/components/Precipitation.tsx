@@ -6,7 +6,7 @@ interface PrecipitationProps {
 
 export default function Precipitation({ precip_mm, precip_in }: PrecipitationProps) {
   const getPrecipitationLevel = (precip: number) => {
-    console.log("Calculating precipitation level for:", precip);
+    // console.log("Calculating precipitation level for:", precip);
     if (precip === 0) return { level: 'None', color: 'text-gray-600', bgColor: 'bg-gray-100', description: 'No precipitation' };
     if (precip < 2.5) return { level: 'Light', color: 'text-blue-600', bgColor: 'bg-blue-100', description: 'Light precipitation' };
     if (precip < 10) return { level: 'Moderate', color: 'text-indigo-600', bgColor: 'bg-indigo-100', description: 'Moderate precipitation' };
@@ -18,7 +18,7 @@ export default function Precipitation({ precip_mm, precip_in }: PrecipitationPro
 //   console.log("Precipitation Info:", precipInfo);
 
   return (
-    <div className="group relative bg-gradient-to-br from-indigo-50 to-blue-50 p-6 rounded-lg border border-indigo-100 hover:from-indigo-100 hover:to-blue-100 hover:border-indigo-200 transition-all duration-300 cursor-pointer">
+    <div className="group relative bg-gradient-to-br from-indigo-50 to-blue-50 p-6 rounded-lg border border-indigo-100 hover:from-indigo-100 hover:to-blue-100 hover:border-indigo-200 transition-all duration-300 cursor-pointer hover:shadow-lg hover:scale-105 h-full">
       {/* Tooltip */}
       <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 -translate-y-full bg-gray-800 text-white text-xs rounded py-2 px-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap z-10">
         Amount of rain, snow, or other precipitation that has fallen

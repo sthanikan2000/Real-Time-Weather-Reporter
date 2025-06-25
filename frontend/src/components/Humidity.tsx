@@ -14,7 +14,7 @@ export default function Humidity({ humidity }: HumidityProps) {
   const humidityInfo = getHumidityLevel(humidity);
 
   return (
-    <div className="group relative bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-lg border border-blue-100 hover:from-blue-100 hover:to-cyan-100 hover:border-blue-200 transition-all duration-300 cursor-pointer">
+    <div className="group relative bg-gradient-to-br from-blue-50 to-cyan-50 p-6 rounded-lg border border-blue-100 hover:from-blue-100 hover:to-cyan-100 hover:border-blue-200 transition-all duration-300 cursor-pointer  hover:shadow-lg hover:scale-105 h-full">
       {/* Tooltip */}
       <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 -translate-y-full bg-gray-800 text-white text-xs rounded py-2 px-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap z-10">
         Amount of water vapor in the air as a percentage

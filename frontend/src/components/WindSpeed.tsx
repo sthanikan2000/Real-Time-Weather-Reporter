@@ -28,7 +28,7 @@ export default function WindSpeed({
   const windInfo = getWindScale(wind_kph);
 
   return (
-    <div className="group relative bg-gradient-to-br from-gray-50 to-slate-50 p-6 rounded-lg border border-gray-100 hover:from-gray-100 hover:to-slate-100 hover:border-gray-200 transition-all duration-300 cursor-pointer">
+    <div className="group relative bg-gradient-to-br from-gray-50 to-slate-50 p-6 rounded-lg border border-gray-100 hover:from-gray-100 hover:to-slate-100 hover:border-gray-200 transition-all duration-300 cursor-pointer  hover:shadow-lg hover:scale-105 h-full">
       {/* Tooltip */}
       <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 -translate-y-full bg-gray-800 text-white text-xs rounded py-2 px-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap z-10">
         Wind speed, direction, and intensity from weather station

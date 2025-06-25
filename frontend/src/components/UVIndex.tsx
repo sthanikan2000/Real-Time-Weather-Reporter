@@ -15,7 +15,7 @@ export default function UVIndex({ uv }: UVIndexProps) {
   const uvInfo = getUVLevel(uv);
 
   return (
-    <div className="group relative bg-gradient-to-br from-yellow-50 to-orange-50 p-6 rounded-lg border border-yellow-100 hover:from-yellow-100 hover:to-orange-100 hover:border-yellow-200 transition-all duration-300 cursor-pointer">
+    <div className="group relative bg-gradient-to-br from-yellow-50 to-orange-50 p-6 rounded-lg border border-yellow-100 hover:from-yellow-100 hover:to-orange-100 hover:border-yellow-200 transition-all duration-300 cursor-pointer hover:shadow-lg hover:scale-105 h-full">
       {/* Tooltip */}
       <div className="absolute -top-2 left-1/2 transform -translate-x-1/2 -translate-y-full bg-gray-800 text-white text-xs rounded py-2 px-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap z-10">
         Ultraviolet radiation intensity from the sun (0-12+ scale)
